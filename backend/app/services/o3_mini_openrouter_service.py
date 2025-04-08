@@ -27,20 +27,20 @@ class OpenRouterO3Service:
         reasoning_effort: Literal["low", "medium", "high"] = "low",
     ) -> str:
         """
-        Makes an API call to OpenRouter O3 and returns the response.
+        向OpenRouter O3发起API调用并返回响应。
 
-        Args:
-            system_prompt (str): The instruction/system prompt
-            data (dict): Dictionary of variables to format into the user message
-            api_key (str | None): Optional custom API key
+        参数：
+            system_prompt (str)：指令/系统提示
+            data (dict)：用于格式化用户消息的变量字典
+            api_key (str | None)：可选的自定义API密钥
 
-        Returns:
-            str: O3's response text
+        返回：
+            str：O3的响应文本
         """
-        # Create the user message with the data
+        # 使用数据创建用户消息
         user_message = format_user_message(data)
 
-        # Use custom client if API key provided, otherwise use default
+        # 如果提供了API密钥则使用自定义客户端，否则使用默认客户端
         client = (
             OpenAI(base_url="https://openrouter.ai/api/v1", api_key=api_key)
             if api_key
@@ -49,21 +49,21 @@ class OpenRouterO3Service:
 
         completion = client.chat.completions.create(
             extra_headers={
-                "HTTP-Referer": "https://gitdiagram.com",  # Optional. Site URL for rankings on openrouter.ai.
-                "X-Title": "gitdiagram",  # Optional. Site title for rankings on openrouter.ai.
+                "HTTP-Referer": "https://gitdiagram.com",  # 可选。用于openrouter.ai排名的网站URL。
+                "X-Title": "gitdiagram",  # 可选。用于openrouter.ai排名的网站标题。
             },
-            model="openai/o3-mini",  # Can be configured as needed
-            reasoning_effort=reasoning_effort,  # Can be adjusted based on needs
+            model="openai/o3-mini",  # 可以根据需要配置
+            reasoning_effort=reasoning_effort,  # 可以根据需求调整
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message},
             ],
-            max_completion_tokens=12000,  # Adjust as needed
+            max_completion_tokens=12000,  # 根据需要调整
             temperature=0.2,
         )
 
         if completion.choices[0].message.content is None:
-            raise ValueError("No content returned from OpenRouter O3")
+            raise ValueError("OpenRouter O3未返回任何内容")
 
         return completion.choices[0].message.content
 
@@ -75,17 +75,17 @@ class OpenRouterO3Service:
         reasoning_effort: Literal["low", "medium", "high"] = "low",
     ) -> AsyncGenerator[str, None]:
         """
-        Makes a streaming API call to OpenRouter O3 and yields the responses.
+        向OpenRouter O3发起流式API调用并产生响应。
 
-        Args:
-            system_prompt (str): The instruction/system prompt
-            data (dict): Dictionary of variables to format into the user message
-            api_key (str | None): Optional custom API key
+        参数：
+            system_prompt (str)：指令/系统提示
+            data (dict)：用于格式化用户消息的变量字典
+            api_key (str | None)：可选的自定义API密钥
 
-        Yields:
-            str: Chunks of O3's response text
+        产生：
+            str：O3响应文本的块
         """
-        # Create the user message with the data
+        # 使用数据创建用户消息
         user_message = format_user_message(data)
 
         headers = {
@@ -126,19 +126,19 @@ class OpenRouterO3Service:
                             ):
                                 yield content
                         except json.JSONDecodeError:
-                            # Skip any non-JSON lines (like the OPENROUTER PROCESSING comments)
+                            # 跳过任何非JSON行（如OPENROUTER PROCESSING注释）
                             continue
 
     def count_tokens(self, prompt: str) -> int:
         """
-        Counts the number of tokens in a prompt.
-        Note: This is a rough estimate as OpenRouter may not provide direct token counting.
+        计算提示中的令牌数量。
+        注意：这是一个粗略估计，因为OpenRouter可能不提供直接的令牌计数。
 
-        Args:
-            prompt (str): The prompt to count tokens for
+        参数：
+            prompt (str)：要计算令牌的提示
 
-        Returns:
-            int: Estimated number of input tokens
+        返回：
+            int：估计的输入令牌数
         """
         num_tokens = len(self.encoding.encode(prompt))
         return num_tokens

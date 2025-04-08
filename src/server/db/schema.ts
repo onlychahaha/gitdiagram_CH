@@ -1,4 +1,4 @@
-// Example model schema from the Drizzle docs
+// Drizzle文档中的示例模型架构
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { sql } from "drizzle-orm";
@@ -11,8 +11,8 @@ import {
 } from "drizzle-orm/pg-core";
 
 /**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
+ * 这是如何使用Drizzle ORM的多项目架构功能的示例。为多个项目使用相同的
+ * 数据库实例。
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
@@ -23,10 +23,10 @@ export const diagramCache = createTable(
   {
     username: varchar("username", { length: 256 }).notNull(),
     repo: varchar("repo", { length: 256 }).notNull(),
-    diagram: varchar("diagram", { length: 10000 }).notNull(), // Adjust length as needed
+    diagram: varchar("diagram", { length: 10000 }).notNull(), // 根据需要调整长度
     explanation: varchar("explanation", { length: 10000 })
       .notNull()
-      .default("No explanation provided"), // Default explanation to avoid data loss of existing rows
+      .default("No explanation provided"), // 默认解释，避免现有行的数据丢失
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

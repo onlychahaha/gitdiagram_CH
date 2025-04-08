@@ -1,17 +1,17 @@
-# This is our processing. This is where GitDiagram makes the magic happen
-# There is a lot of DETAIL we need to extract from the repository to produce detailed and accurate diagrams
-# I will immediately put out there that I'm trying to reduce costs. Theoretically, I could, for like 5x better accuracy, include most file content as well which would make for perfect diagrams, but thats too many tokens for my wallet, and would probably greatly increase generation time. (maybe a paid feature?)
+# 这是我们的处理逻辑。这是GitDiagram发挥魔法的地方
+# 我们需要从仓库中提取大量细节来生成详细且准确的图表
+# 我先在这里指出，我正在尝试降低成本。理论上，我可以包含大多数文件内容来获得5倍更好的准确性，这将制作出完美的图表，但对我的钱包来说这太多token了，并且可能会大大增加生成时间。（也许这可以作为付费功能？）
 
-# THE PROCESS:
+# 处理流程：
 
-# imagine it like this:
-# def prompt1(file_tree, readme) -> explanation of diagram
-# def prompt2(explanation, file_tree) -> maps relevant directories and files to parts of diagram for interactivity
-# def prompt3(explanation, map) -> Mermaid.js code
+# 想象它是这样的：
+# def prompt1(file_tree, readme) -> 图表的解释
+# def prompt2(explanation, file_tree) -> 将相关目录和文件映射到图表的各个部分以实现交互性
+# def prompt3(explanation, map) -> Mermaid.js代码
 
-# Note: Originally prompt1 and prompt2 were combined - but I tested it, and turns out mapping relevant dirs and files in one prompt along with generating detailed and accurate diagrams was difficult for Claude 3.5 Sonnet. It lost detail in the explanation and dedicated more "effort" to the mappings, so this is now its own prompt.
+# 注意：最初prompt1和prompt2是合并的 - 但我测试后发现，在一个提示中同时映射相关目录和文件以及生成详细准确的图表对Claude 3.5 Sonnet来说很困难。它在解释中失去了细节，并将更多"精力"投入到映射上，所以这现在是单独的提示。
 
-# This is my first take at prompt engineering so if you have any ideas on optimizations please make an issue on the GitHub!
+# 这是我第一次尝试提示工程，所以如果你有任何优化的想法，请在GitHub上提出问题！
 
 SYSTEM_FIRST_PROMPT = """
 You are tasked with explaining to a principal software engineer how to draw the best and most accurate system design diagram / architecture of a given project. This explanation should be tailored to the specific project's purpose and structure. To accomplish this, you will be provided with two key pieces of information:
@@ -58,9 +58,9 @@ Present your explanation and instructions within <explanation> tags, ensuring th
 """
 
 # - A legend explaining any symbols or abbreviations used
-# ^ removed since it was making the diagrams very long
+# ^ 已移除，因为它使图表过长
 
-# just adding some clear separation between the prompts
+# 只是在提示之间添加一些清晰的分隔
 # ************************************************************
 # ************************************************************
 
@@ -90,7 +90,7 @@ Now, provide your final answer in the following format:
 Remember to be as specific as possible in your mappings, only use what is given to you from the file tree, and to strictly follow the components mentioned in the explanation. 
 """
 
-# ❌ BELOW IS A REMOVED SECTION FROM THE ABOVE PROMPT USED FOR CLAUDE 3.5 SONNET
+# ❌ 以下是从上述提示中删除的部分，用于Claude 3.5 Sonnet
 # Before providing your final answer, use the <scratchpad> to think through your process:
 # 1. List the key components identified in the system design.
 # 2. For each component, brainstorm potential corresponding directories or files.
@@ -100,7 +100,7 @@ Remember to be as specific as possible in your mappings, only use what is given 
 # [Your thought process here]
 # </scratchpad>
 
-# just adding some clear separation between the prompts
+# 只是在提示之间添加一些清晰的分隔
 # ************************************************************
 # ************************************************************
 
@@ -193,10 +193,10 @@ EXTREMELY Important notes on syntax!!! (PAY ATTENTION TO THIS):
 - In Mermaid.js syntax, there cannot be spaces in the relationship label names. For example: `A -->| "example relationship" | B` is a syntax error. It should be `A -->|"example relationship"| B` 
 - In Mermaid.js syntax, you cannot give subgraphs an alias like nodes. For example: `subgraph A "Layer A"` is a syntax error. It should be `subgraph "Layer A"` 
 """
-# ^^^ note: ive generated a few diagrams now and claude still writes incorrect mermaid code sometimes. in the future, refer to those generated diagrams and add important instructions to the prompt above to avoid those mistakes. examples are best.
+# ^^^ 注意：我现在已经生成了几个图表，但claude有时仍然编写不正确的mermaid代码。未来，参考那些生成的图表，并在上面的提示中添加重要说明，以避免这些错误。示例是最好的。
 
 # e. A legend is included
-# ^ removed since it was making the diagrams very long
+# ^ 已移除，因为它使图表过长
 
 
 ADDITIONAL_SYSTEM_INSTRUCTIONS_PROMPT = """

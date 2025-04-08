@@ -13,12 +13,12 @@ load_dotenv()
 
 router = APIRouter(prefix="/modify", tags=["Claude"])
 
-# Initialize services
+# 初始化服务
 # claude_service = ClaudeService()
 o1_service = OpenAIO1Service()
 
 
-# Define the request body model
+# 定义请求体模型
 
 
 class ModifyRequest(BaseModel):

@@ -3,23 +3,23 @@
 import { useEffect, useState, useRef } from "react";
 
 const messages = [
-  "Checking if its cached...",
-  "Generating diagram...",
-  "Analyzing repository...",
-  "Prompting o3-mini...",
-  "Inspecting file paths...",
-  "Finding component relationships...",
-  "Linking components to code...",
-  "Extracting relevant directories...",
-  "Reasoning about the diagram...",
-  "Prompt engineers needed -> Check out the GitHub",
-  "Shoutout to GitIngest for inspiration",
-  "I need to find a way to make this faster...",
-  "Finding the meaning of life...",
-  "I'm tired...",
-  "Please just give me the diagram...",
-  "...NOW!",
-  "guess not...",
+  "检查是否有缓存...",
+  "生成图表中...",
+  "分析仓库中...",
+  "提示o3-mini中...",
+  "检查文件路径...",
+  "寻找组件关系...",
+  "链接组件到代码...",
+  "提取相关目录...",
+  "推理图表内容...",
+  "需要提示工程师 -> 查看GitHub",
+  "感谢GitIngest的灵感",
+  "我需要找到使这更快的方法...",
+  "寻找生命的意义...",
+  "我累了...",
+  "请给我图表...",
+  "...现在!",
+  "看来不行...",
 ];
 
 interface LoadingProps {
@@ -95,7 +95,7 @@ export default function Loading({
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-scroll effect
+  // 自动滚动效果
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -128,11 +128,11 @@ export default function Loading({
     const reasoningType = shouldShowReasoning(status);
     switch (reasoningType) {
       case "explanation":
-        return "Model is analyzing the repository structure and codebase...";
+        return "模型正在分析仓库结构和代码库...";
       case "mapping":
-        return "Model is identifying component relationships and dependencies...";
+        return "模型正在识别组件关系和依赖...";
       case "diagram":
-        return "Model is planning the diagram layout and connections...";
+        return "模型正在规划图表布局和连接...";
       default:
         return null;
     }
@@ -146,8 +146,8 @@ export default function Loading({
       case "explanation_chunk":
         return {
           text: reasoningType
-            ? "Model is reasoning about repository structure"
-            : "Explaining repository structure...",
+            ? "模型正在推理仓库结构"
+            : "解释仓库结构中...",
           isReasoning: !!reasoningType,
         };
       case "mapping_sent":
@@ -155,8 +155,8 @@ export default function Loading({
       case "mapping_chunk":
         return {
           text: reasoningType
-            ? "Model is reasoning about component relationships"
-            : "Creating component mapping...",
+            ? "模型正在推理组件关系"
+            : "创建组件映射中...",
           isReasoning: !!reasoningType,
         };
       case "diagram_sent":
@@ -164,8 +164,8 @@ export default function Loading({
       case "diagram_chunk":
         return {
           text: reasoningType
-            ? "Model is reasoning about diagram structure"
-            : "Generating diagram...",
+            ? "模型正在推理图表结构"
+            : "生成图表中...",
           isReasoning: !!reasoningType,
         };
       default:
@@ -191,10 +191,10 @@ export default function Loading({
               {statusDisplay.isReasoning && <SequentialDots />}
             </div>
             <div className="flex items-center gap-3 text-xs font-medium text-purple-500">
-              {cost && <span>Estimated cost: {cost}</span>}
+              {cost && <span>估计成本: {cost}</span>}
               <div className="flex items-center gap-2">
                 <span className="rounded-full bg-purple-100 px-2 py-0.5">
-                  Step {getStepNumber(status)}/3
+                  步骤 {getStepNumber(status)}/3
                 </span>
                 <StepDots currentStep={getStepNumber(status)} />
               </div>
@@ -202,16 +202,16 @@ export default function Loading({
           </div>
         </div>
 
-        {/* Scrollable content */}
+        {/* 可滚动内容 */}
         <div ref={scrollRef} className="max-h-[400px] overflow-y-auto p-6">
           <div className="flex flex-col gap-6">
-            {/* Only show reasoning message if we have some content */}
+            {/* 只在有内容时显示推理消息 */}
             {reasoningMessage &&
               statusDisplay.isReasoning &&
               (explanation ?? mapping ?? diagram) && (
                 <div className="rounded-lg bg-purple-100/50 p-4 text-sm text-purple-500">
                   <div className="flex items-center gap-2">
-                    <p className="font-medium">Reasoning</p>
+                    <p className="font-medium">推理中</p>
                     <SequentialDots />
                   </div>
                   <p className="mt-2 leading-relaxed">{reasoningMessage}</p>
@@ -219,13 +219,13 @@ export default function Loading({
               )}
             {explanation && (
               <div className="rounded-lg bg-white/50 p-4 text-sm text-gray-600">
-                <p className="font-medium text-purple-500">Explanation:</p>
+                <p className="font-medium text-purple-500">解释:</p>
                 <p className="mt-2 leading-relaxed">{explanation}</p>
               </div>
             )}
             {mapping && (
               <div className="rounded-lg bg-white/50 p-4 text-sm text-gray-600">
-                <p className="font-medium text-purple-500">Mapping:</p>
+                <p className="font-medium text-purple-500">映射:</p>
                 <pre className="mt-2 overflow-x-auto whitespace-pre-wrap leading-relaxed">
                   {mapping}
                 </pre>
@@ -234,7 +234,7 @@ export default function Loading({
             {diagram && (
               <div className="rounded-lg bg-white/50 p-4 text-sm text-gray-600">
                 <p className="font-medium text-purple-500">
-                  Mermaid.js diagram:
+                  Mermaid.js图表:
                 </p>
                 <pre className="mt-2 overflow-x-auto whitespace-pre-wrap leading-relaxed">
                   {diagram}

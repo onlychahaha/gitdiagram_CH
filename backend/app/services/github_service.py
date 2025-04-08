@@ -10,21 +10,21 @@ load_dotenv()
 
 class GitHubService:
     def __init__(self, pat: str | None = None):
-        # Try app authentication first
+        # 首先尝试应用程序认证
         self.client_id = os.getenv("GITHUB_CLIENT_ID")
         self.private_key = os.getenv("GITHUB_PRIVATE_KEY")
         self.installation_id = os.getenv("GITHUB_INSTALLATION_ID")
 
-        # Use provided PAT if available, otherwise fallback to env PAT
+        # 如果提供了PAT则使用，否则回退到环境变量中的PAT
         self.github_token = pat or os.getenv("GITHUB_PAT")
 
-        # If no credentials are provided, warn about rate limits
+        # 如果没有提供凭据，警告关于速率限制
         if (
             not all([self.client_id, self.private_key, self.installation_id])
             and not self.github_token
         ):
             print(
-                "\033[93mWarning: No GitHub credentials provided. Using unauthenticated requests with rate limit of 60 requests/hour.\033[0m"
+                "\033[93m警告：未提供GitHub凭据。使用未认证请求，速率限制为每小时60次请求。\033[0m"
             )
 
         self.access_token = None
@@ -35,10 +35,10 @@ class GitHubService:
         now = int(time.time())
         payload = {
             "iat": now,
-            "exp": now + (10 * 60),  # 10 minutes
+            "exp": now + (10 * 60),  # 10分钟
             "iss": self.client_id,
         }
-        # Convert PEM string format to proper newlines
+        # 将PEM字符串格式转换为正确的换行符
         return jwt.encode(payload, self.private_key, algorithm="RS256")  # type: ignore
 
     # autopep8: on

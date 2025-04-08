@@ -1,126 +1,126 @@
-[![Image](./docs/readme_img.png "GitDiagram Front Page")](https://gitdiagram.com/)
+[![Image](./docs/readme_img.png "GitDiagram 首页")](https://gitdiagram.com/)
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 [![Kofi](https://img.shields.io/badge/Kofi-F16061.svg?logo=ko-fi&logoColor=white)](https://ko-fi.com/ahmedkhaleel2004)
 
 # GitDiagram
 
-Turn any GitHub repository into an interactive diagram for visualization in seconds.
+将任何GitHub仓库转换为交互式系统设计/架构图，实现可视化，只需几秒钟。
 
-You can also replace `hub` with `diagram` in any Github URL to access its diagram.
+您也可以在任何GitHub URL中将`hub`替换为`diagram`来访问其图表。
 
-## 🚀 Features
+## 🚀 功能特点
 
-- 👀 **Instant Visualization**: Convert any GitHub repository structure into a system design / architecture diagram
-- 🎨 **Interactivity**: Click on components to navigate directly to source files and relevant directories
-- ⚡ **Fast Generation**: Powered by Claude 3.5 Sonnet for quick and accurate diagrams
-- 🔄 **Customization**: Modify and regenerate diagrams with custom instructions
-- 🌐 **API Access**: Public API available for integration (WIP)
+- 👀 **即时可视化**：将任何GitHub仓库结构转换为系统设计/架构图
+- 🎨 **交互性**：点击组件直接导航到源文件和相关目录
+- ⚡ **快速生成**：由OpenAI o3-mini提供支持，快速准确地生成图表
+- 🔄 **自定义功能**：通过自定义指令修改和重新生成图表
+- 🌐 **API访问**：可用于集成的公共API（开发中）
 
-## ⚙️ Tech Stack
+## ⚙️ 技术栈
 
-- **Frontend**: Next.js, TypeScript, Tailwind CSS, ShadCN
-- **Backend**: FastAPI, Python, Server Actions
-- **Database**: PostgreSQL (with Drizzle ORM)
-- **AI**: OpenAI o3-mini
-- **Deployment**: Vercel (Frontend), EC2 (Backend)
-- **CI/CD**: GitHub Actions
-- **Analytics**: PostHog, Api-Analytics
+- **前端**：Next.js、TypeScript、Tailwind CSS、ShadCN
+- **后端**：FastAPI、Python、Server Actions
+- **数据库**：PostgreSQL（使用Drizzle ORM）
+- **AI**：OpenAI o3-mini
+- **部署**：Vercel（前端）、EC2（后端）
+- **CI/CD**：GitHub Actions
+- **分析**：PostHog、Api-Analytics
 
-## 🤔 About
+## 🤔 关于
 
-I created this because I wanted to contribute to open-source projects but quickly realized their codebases are too massive for me to dig through manually, so this helps me get started - but it's definitely got many more use cases!
+我创建这个项目是因为我想为开源项目做贡献，但很快发现它们的代码库太庞大，无法手动深入研究，所以这有助于我开始——但它肯定有更多用途！
 
-Given any public (or private!) GitHub repository it generates diagrams in Mermaid.js with OpenAI's o3-mini! (Previously Claude 3.5 Sonnet)
+给定任何公共（或私有！）GitHub仓库，它都会使用OpenAI的o3-mini生成Mermaid.js图表！（之前使用Claude 3.5 Sonnet）
 
-I extract information from the file tree and README for details and interactivity (you can click components to be taken to relevant files and directories)
+我从文件树和README中提取信息以获取详细信息和交互性（您可以点击组件跳转到相关文件和目录）
 
-Most of what you might call the "processing" of this app is done with prompt engineering - see `/backend/app/prompts.py`. This basically extracts and pipelines data and analysis for a larger action workflow, ending in the diagram code.
+这个应用程序的大部分"处理"都是通过提示工程完成的——请参阅`/backend/app/prompts.py`。这基本上是提取和管道化数据和分析，用于更大的动作工作流，最终生成图表代码。
 
-## 🔒 How to diagram private repositories
+## 🔒 如何为私有仓库生成图表
 
-You can simply click on "Private Repos" in the header and follow the instructions by providing a GitHub personal access token with the `repo` scope.
+您可以简单地点击页眉中的"Private Repos"并按照说明提供具有`repo`权限的GitHub个人访问令牌。
 
-You can also self-host this app locally (backend separated as well!) with the steps below.
+您也可以通过以下步骤在本地自行托管此应用程序（后端也是分离的！）。
 
-## 🛠️ Self-hosting / Local Development
+## 🛠️ 自行托管/本地开发
 
-1. Clone the repository
+1. 克隆仓库
 
 ```bash
 git clone https://github.com/ahmedkhaleel2004/gitdiagram.git
 cd gitdiagram
 ```
 
-2. Install dependencies
+2. 安装依赖
 
 ```bash
 pnpm i
 ```
 
-3. Set up environment variables (create .env)
+3. 设置环境变量（创建.env）
 
 ```bash
 cp .env.example .env
 ```
 
-Then edit the `.env` file with your Anthropic API key and optional GitHub personal access token.
+然后使用您的Anthropic API密钥和可选的GitHub个人访问令牌编辑`.env`文件。
 
-4. Run backend
+4. 运行后端
 
 ```bash
 docker-compose up --build -d
 ```
 
-Logs available at `docker-compose logs -f`
-The FastAPI server will be available at `localhost:8000`
+日志可在`docker-compose logs -f`查看
+FastAPI服务器将在`localhost:8000`可用
 
-5. Start local database
+5. 启动本地数据库
 
 ```bash
 chmod +x start-database.sh
 ./start-database.sh
 ```
 
-When prompted to generate a random password, input yes.
-The Postgres database will start in a container at `localhost:5432`
+当提示生成随机密码时，输入yes。
+Postgres数据库将在`localhost:5432`的容器中启动
 
-6. Initialize the database schema
+6. 初始化数据库架构
 
 ```bash
 pnpm db:push
 ```
 
-You can view and interact with the database using `pnpm db:studio`
+您可以使用`pnpm db:studio`查看和与数据库交互
 
-7. Run Frontend
+7. 运行前端
 
 ```bash
 pnpm dev
 ```
 
-You can now access the website at `localhost:3000` and edit the rate limits defined in `backend/app/routers/generate.py` in the generate function decorator.
+现在您可以在`localhost:3000`访问网站，并编辑`backend/app/routers/generate.py`中的生成函数装饰器中定义的速率限制。
 
-## Contributing
+## 贡献
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+欢迎贡献！请随时提交Pull Request。
 
-## Acknowledgements
+## 致谢
 
-Shoutout to [Romain Courtois](https://github.com/cyclotruc)'s [Gitingest](https://gitingest.com/) for inspiration and styling
+感谢[Romain Courtois](https://github.com/cyclotruc)的[Gitingest](https://gitingest.com/)提供灵感和样式
 
-## 📈 Rate Limits
+## 📈 速率限制
 
-I am currently hosting it for free with no rate limits though this is somewhat likely to change in the future.
+我目前免费托管它，没有速率限制，尽管这在未来可能会改变。
 
-<!-- If you would like to bypass these, self-hosting instructions are provided. I also plan on adding an input for your own Anthropic API key.
+<!-- 如果您想绕过这些限制，提供了自行托管说明。我还计划添加您自己的Anthropic API密钥输入。
 
-Diagram generation:
+图表生成：
 
-- 1 request per minute
-- 5 requests per day -->
+- 每分钟1个请求
+- 每天5个请求 -->
 
-## 🤔 Future Steps
+## 🤔 未来计划
 
-- Implement font-awesome icons in diagram
-- Implement an embedded feature like star-history.com but for diagrams. The diagram could also be updated progressively as commits are made.
+- 在图表中实现font-awesome图标
+- 实现类似star-history.com的嵌入式功能，但用于图表。随着提交的进行，图表也可以逐步更新。
